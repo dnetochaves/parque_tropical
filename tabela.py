@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS planilha_geral_condominio (
     valor_agua REAL,
     valor_iptu REAL,
     taxa_bancaria REAL,
-    nome_locatario TEXT
+    nome_locatario TEXT,
+    status_locacao BOOLEAN DEFAULT 0
 
                
                

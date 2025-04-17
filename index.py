@@ -24,7 +24,7 @@ if pagina == "Planilha Geral de Condominio":
 
 
 
-    df = pd.DataFrame(dados, columns=["ID", "Contrato", "Unidade", "Vencimento Boleto", "Aluguel", "Taxa de Administração Aluguel", "Data Início Contrato", "Data Fim Contrato", "Valor Condomínio", "Valor Água", "Valor IPTU", "Taxa Bancária", "Nome Locatario"])
+    df = pd.DataFrame(dados, columns=["ID", "Contrato", "Unidade", "Vencimento Boleto", "Aluguel", "Taxa de Administração Aluguel", "Data Início Contrato", "Data Fim Contrato", "Valor Condomínio", "Valor Água", "Valor IPTU", "Taxa Bancária", "Nome Locatario", "Status da Locação"])
     st.dataframe(df)
     
     st.divider()
@@ -80,13 +80,14 @@ elif pagina == "Add Contrato":
         valor_iptu = st.number_input("Valor do IPTU", min_value=0.0, format="%.2f")
         taxa_bancaria = st.number_input("Taxa bancária", min_value=0.0, format="%.2f")
         nome_locatario = st.text_input("Nome Locatário")
+        status_locacao = st.selectbox("Status da locação", ["Ativo", "Inativo"])
 
         enviado = st.form_submit_button("Cadastrar")
 
         if enviado:
             # Inserir dados no banco de dados
             contrato = random.randint(1000, 9999)  # Gerar um número aleatório para o contrato
-            dados.inserir_dados(contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria, nome_locatario)
+            dados.inserir_dados(contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria, nome_locatario, status_locacao)
             st.success("Dados cadastrados com sucesso!")
 
 

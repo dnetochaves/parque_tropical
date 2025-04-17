@@ -6,14 +6,14 @@ def conecta_bd():
     return conexao
 
 # Inserir dados
-def inserir_dados(contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria, nome_locatario):
+def inserir_dados(contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria, nome_locatario, status_locacao):
     conexao = conecta_bd()
     cursor = conexao.cursor()
 
     cursor.execute('''
-    INSERT INTO planilha_geral_condominio (contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria, nome_locatario)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria, nome_locatario))
+    INSERT INTO planilha_geral_condominio (contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria, nome_locatario, status_locacao)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria, nome_locatario, status_locacao))
     conexao.commit()
     conexao.close()
 
