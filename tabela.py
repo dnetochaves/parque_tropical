@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS planilha_geral_condominio (
     valor_condominio REAL,
     valor_agua REAL,
     valor_iptu REAL,
-    taxa_bancaria REAL
+    taxa_bancaria REAL,
+    nome_locatario TEXT
 
                
                

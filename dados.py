@@ -6,14 +6,14 @@ def conecta_bd():
     return conexao
 
 # Inserir dados
-def inserir_dados(contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria):
+def inserir_dados(contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria, nome_locatario):
     conexao = conecta_bd()
     cursor = conexao.cursor()
 
     cursor.execute('''
-    INSERT INTO planilha_geral_condominio (contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria))
+    INSERT INTO planilha_geral_condominio (contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria, nome_locatario)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (contrato, unidade, vencimento_boleto, aluguel, taxa_administracao_aluguel, data_inicio_contrato, data_fim_contrato, valor_condominio, valor_agua, valor_iptu, taxa_bancaria, nome_locatario))
     conexao.commit()
     conexao.close()
 
@@ -27,3 +27,8 @@ def listar_dados():
     
     conexao.close()
     return dados
+
+# Excluir dados
+def excluir_dados(numero_contrato):
+    conexao = sqlite3.connect('parque_tropical.db')
+    return conexao
