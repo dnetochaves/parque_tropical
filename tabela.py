@@ -1,5 +1,4 @@
 import sqlite3
-
 # Conectando ao banco de dados
 conexao = sqlite3.connect('parque_tropical.db')
 
@@ -10,6 +9,7 @@ cursor = conexao.cursor()
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS planilha_geral_condominio (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    contrato TEXT,
     unidade TEXT,
     vencimento_boleto DATE,
     aluguel REAL,
