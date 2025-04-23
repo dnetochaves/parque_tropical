@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import json
 from datetime import datetime
+from fpdf import FPDF
+import os
 
 st.set_page_config(page_title="Boletos Condominiais", layout="wide")
 st.title("Planilha Condominial 📊")
@@ -104,3 +106,57 @@ with st.container():
         if "Total BOLET" in df.columns:
             total_geral = df["Total BOLET"].sum()
             st.metric("💰 Total Geral dos Boletos", value=f"R$ {total_geral:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
+
+
+# Função para gerar o PDF e retornar o caminho do arquivo
+def gerar_pdf(locatario, total):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.cell(200, 10, txt=f"Relatório de Boletos - Locatário: {locatario}", ln=True, align="C")
+    pdf.ln(10)
+    pdf.cell(200, 10, txt=f"Total de Boletos: {total}", ln=True, align="L")
+    file_path = f"{locatario}_relatorio.pdf"
+    pdf.output(file_path)
+    return file_path
+
+# Layout com container
+with st.container():
+    st.subheader("🏢 Total de Boletos por Locatário")
+
+    # Agrupamento por locatário
+    total_por_locatario = (
+        df.groupby("Locatário")["Total BOLET"]
+        .sum()
+        .sort_values(ascending=False)
+        .reset_index()
+    ).rename(columns={"Total BOLET": "Total (R$)"})
+
+    # Formatar os valores monetários
+    total_por_locatario["Total (R$)"] = total_por_locatario["Total (R$)"].apply(formato_real)
+
+    # Adicionar uma linha com o total geral
+    total_geral = df["Total BOLET"].sum()
+    total_por_locatario = pd.concat([
+        total_por_locatario,
+        pd.DataFrame([{"Locatário": "Total Geral", "Total (R$)": formato_real(total_geral)}])
+    ], ignore_index=True)
+
+    # Exibir a tabela com botões
+    for index, row in total_por_locatario.iterrows():
+        col1, col2, col3 = st.columns([3, 1, 1])  # Dividir em três colunas
+        with col1:
+            st.write(f"**{row['Locatário']}**: {row['Total (R$)']}")
+        with col2:
+            if st.button(f"Gerar PDF {row['Locatário']}", key=f"pdf_{index}"):
+                file_path = gerar_pdf(row["Locatário"], row["Total (R$)"])
+                st.session_state[f"file_path_{index}"] = file_path  # Salvar o caminho no estado da sessão
+        with col3:
+            if f"file_path_{index}" in st.session_state:
+                with open(st.session_state[f"file_path_{index}"], "rb") as file:
+                    st.download_button(
+                        label="📥 Baixar PDF",
+                        data=file,
+                        file_name=st.session_state[f"file_path_{index}"],
+                        mime="application/pdf"
+                    )
