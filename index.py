@@ -119,3 +119,20 @@ with st.container():
 
     st.altair_chart(chart, use_container_width=True)
 
+
+with st.container():
+    st.subheader("🏢 Total de Boletos por Locatário")
+
+    # Agrupamento por locatário
+    total_por_locatario = (
+        df.groupby("Locatário")["Total BOLET"]
+        .sum()
+        .sort_values(ascending=False)
+        .reset_index()
+    ).rename(columns={"Total BOLET": "Total (R$)"})
+
+    # Formatar os valores monetários
+    total_por_locatario["Total (R$)"] = total_por_locatario["Total (R$)"].apply(formato_real)
+
+    # Exibir a tabela
+    st.dataframe(total_por_locatario, use_container_width=True)
